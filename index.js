@@ -11,8 +11,8 @@ app.use(express.json({ limit: "16Kb" }))
 
 app.post("/createUser", (req, res) => {
     try {
-        const { userName, email } = req.body
-        if (!userName || !email) {
+        const { userName, email, age, profession } = req.body
+        if (!userName || !email || !age || !profession) {
             return res.render("createUsers.ejs", { message: "All fields are required!" })
         }
 
@@ -21,7 +21,9 @@ app.post("/createUser", (req, res) => {
 
         const newUser = {
             userName: userName,
-            email: email
+            email: email,
+            age: age,
+            profession: profession
         }
 
         for (const index in users) {
@@ -48,23 +50,33 @@ app.post("/createUser", (req, res) => {
 })
 
 app.post("/editUser", (req, res) => {
-    const { newName, email } = req.body
-    if (!newName || !email) {
-        return res.render("editUserPage.ejs", { message: "All fields are required!" })
+    const { newName, email, age, profession } = req.body
+    if (!email) {
+        return res.render("editUserPage.ejs", { message: "Email is required!" })
     }
 
     let updated = false;
     const users = require("./users.json")
 
-    for (const index in users) {
-        if (users[index].userName == newName) {
-            return res.render("editUserPage.ejs", { message: "There is a user with same name, please try again with another username" })
-        }
-    }
+    // for (const index in users) {
+    //     if (users[index].userName == newName) {
+    //         return res.render("editUserPage.ejs", { message: "There is a user with same name, please try again with another username" })
+    //     }
+    // }
 
     for (const index in users) {
         if (users[index].email == email) {
-            users[index].userName = newName
+
+            if (newName.length > 0) {
+                users[index].userName = newName
+            }
+            if (age > 0) {
+                users[index].age = age
+            }
+            if (profession.length > 0) {
+                users[index].profession = profession
+            }
+
             updated = true;
         }
     }
@@ -99,19 +111,7 @@ app.get("/editUserPage", (req, res) => {
 })
 
 
-// app.get("/sameUsername", (req, res) => {
-//     const userName = req.body
-//     const users = require("./users.json")
-//     let isUserNameSame = false;
-//     for (const index in users) {
-//         if (users[index].userName == userName) {
-//             isUserNameSame = true
-//         }
-//     }
-//     if (isUserNameSame) {
-//         return res.
-//     }
-// })
+
 
 app.listen(3030, () => {
     console.log("Server is listening on port 3030")

@@ -30,8 +30,11 @@
         width: 11rem;
         padding: 0.8rem 1rem;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
+        gap: 1rem;
+        
         box-sizing: border-box;
         margin: 0.6rem 0.5rem;
         border-radius: 2rem;
@@ -57,7 +60,11 @@
   <body>
     <div class="container">
       <% users.forEach((user) => { %>
-      <div class="user"><%= user.userName %></div>
+      <div class="user">
+        <h2><%= user.userName %></h2>
+        <h3><%= user.profession %></h3>
+        <h4><%= user.age %></h4>
+      </div>
       <% }) %>
     </div>
   </body>
